@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "667718287960",
+    "project_id": "huaweidigi2",
+    "storage_bucket": "huaweidigi2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667718287960:android:ba4ee300d4cd65c84c802d",
+        "android_client_info": {
+          "package_name": "com.huaweidigi.app2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr8k7oZbT042ZM0_R8MLOQBHTkhl2ohmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
