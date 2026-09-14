@@ -5607,7 +5607,9 @@ WHERE ChatID = '${ChatID}'
       String comm = '''
         UPDATE DRUG_MT SET DEL=1 WHERE DRUG_NO='${DRUG_NO}';
       ''';
+      dev.log('comm:${comm}');
       String result = await sql_command("${comm}");
+      dev.log('result:${result}');
       /*
       String comm = "DELETE FROM DRUG_MT WHERE DRUG_NO='${DRUG_NO}'";
       String result = await sql_command("${comm}");
@@ -5624,32 +5626,37 @@ WHERE ChatID = '${ChatID}'
       });
 
       //找出學生的老師
-      for(int i=0;i<cLASS_NO_for_teacher_chat.length;i++){
-        if(
-        CUSTOMER_selectedValue.DEPM_NO==cLASS_NO_for_teacher_chat[i].DEPM_NO &&
-            CUSTOMER_selectedValue.CLASS_NO==cLASS_NO_for_teacher_chat[i].CLASS_NO
-        ){
-          String FCM = await search_EMPLOYEE_fcm_sub(ACCOUNT:cLASS_NO_for_teacher_chat[i].ACCOUNT);
-          await sendPushNotification(
-              title: "${CUSTOMER_selectedValue.sel_cUSTOMER_DL!.USER_NM} 家長",
-              message: "刪除一筆用藥委託",
-              token: FCM,//cLASS_NO_for_teacher_chat[i].FCM,
-              ChatID:"用藥委託刪除",
-              CS_NO:CUSTOMER_selectedValue.CS_NO,
-              DATE:"${DATE}",//日期
-              UserAccount:'${CUSTOMER_selectedValue.sel_cUSTOMER_DL!.ACCOUNT.trim()}',
-              TeacherAccount:"${cLASS_NO_for_teacher_chat[i].ACCOUNT}".trim()
-          );
+      try{
+        for(int i=0;i<cLASS_NO_for_teacher_chat.length;i++){
+          if(
+          CUSTOMER_selectedValue.DEPM_NO==cLASS_NO_for_teacher_chat[i].DEPM_NO &&
+              CUSTOMER_selectedValue.CLASS_NO==cLASS_NO_for_teacher_chat[i].CLASS_NO
+          ){
+            String FCM = await search_EMPLOYEE_fcm_sub(ACCOUNT:cLASS_NO_for_teacher_chat[i].ACCOUNT);
+            dev.log('FCM:${FCM}');
+            await sendPushNotification(
+                title: "${CUSTOMER_selectedValue.sel_cUSTOMER_DL!.USER_NM} 家長",
+                message: "刪除一筆用藥委託",
+                token: FCM,//cLASS_NO_for_teacher_chat[i].FCM,
+                ChatID:"用藥委託刪除",
+                CS_NO:CUSTOMER_selectedValue.CS_NO,
+                DATE:"${DATE}",//日期
+                UserAccount:'${CUSTOMER_selectedValue.sel_cUSTOMER_DL!.ACCOUNT.trim()}',
+                TeacherAccount:"${cLASS_NO_for_teacher_chat[i].ACCOUNT}".trim()
+            );
+          }
+
         }
+      }
+      catch(e){
 
       }
 
 
 
-
     }
     catch(e){
-      dev.log("${e}");
+      dev.log("err:${e}");
       //EasyLoading.showInfo("錯誤:${e}");
       SmartDialog.dismiss();
       SmartDialog.showToast("刪除失敗請重試");
@@ -5940,6 +5947,22 @@ WHERE ChatID = '${ChatID}'
             }
           },
         child:Scaffold(
+          /*
+          // --- 新增浮動按鈕 (工程測試用) ---
+          floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: Colors.redAccent,
+            icon: const Icon(Icons.build, color: Colors.white),
+            label: const Text(
+              "工程測試",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              test();
+            },
+          ),
+          // --------------------------------
+
+           */
       body: Container(
         color: Color(0xffF8F8F8),
         padding: EdgeInsets.only(left:0.w,right: 0.w),width: ScreenUtil().screenWidth,height: ScreenUtil().screenHeight,

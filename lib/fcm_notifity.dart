@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:code3/sql.dart';
-import 'package:firebase_admin_sdk/firebase_admin.dart';
+import 'package:googleapis_auth/auth_io.dart'; // ✅ 改用 googleapis_auth
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -105,6 +105,61 @@ Future<void> sendPushNotification(
   }
 }
 
+// ✅ 使用 googleapis_auth 解析 Service Account 金鑰並取得 Bearer Token
+Future<String?> getOAuthToken() async {
+  try {
+    final jsonStr = await rootBundle.loadString(
+      'assets/file/huaweidigi2-firebase-adminsdk-g8i8z-cb0db58236.json',
+    );
+    final accountCredentials = ServiceAccountCredentials.fromJson(
+      json.decode(jsonStr),
+    );
+
+    const scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+
+    final client = await clientViaServiceAccount(accountCredentials, scopes);
+    final token = client.credentials.accessToken.data;
+    client.close();
+
+    if (token.isEmpty) {
+      log('⚠️ FCM 憑證取得失敗：AccessToken 為空');
+      return null;
+    }
+
+    return token;
+  } catch (e, stackTrace) {
+    log('⚠️ FCM 後端金鑰失效或取得憑證異常: $e');
+    log('Stack trace: $stackTrace');
+    return null;
+  }
+}
+/*
+Future<String?> getOAuthToken() async {
+  try {
+    final jsonStr = await rootBundle.loadString(
+      'assets/file/huaweidigi2-firebase-adminsdk-g8i8z-cb0db58236.json',
+    );
+    final app = FirebaseAdmin.instance.certFromMap(json.decode(jsonStr));
+    final tokenResult = await app.getAccessToken();
+
+    // 避免將 null 轉為字串 "null"
+    final token = tokenResult.accessToken;
+    if (token == null || token.isEmpty) {
+      log('⚠️ FCM 憑證取得失敗：AccessToken 為空');
+      return null;
+    }
+
+    return token;
+  } catch (e, stackTrace) {
+    // 攔截 OpenIdException、Invalid JWT Signature 或其他憑證例外
+    log('⚠️ FCM 後端金鑰失效或取得憑證異常: $e');
+    log('Stack trace: $stackTrace');
+    return null;
+  }
+}
+
+ */
+/*
 Future<String> getOAuthToken() async {
 
   var app = FirebaseAdmin.instance.certFromMap(json.decode(await rootBundle.loadString('assets/file/huaweidigi2-firebase-adminsdk-g8i8z-4866db06b2.json')));
@@ -115,11 +170,13 @@ Future<String> getOAuthToken() async {
   return accessToken.accessToken.toString();
 }
 
+ */
+
 
 test()async{
   await sendPushNotification(
       title: "工程測試",
       message: "工程測試",
-      token: "Y2cxOWNfODQ0RWFmb0RWT3RGNG9aUDpBUEE5MWJIZGxYclYyV0F4QkZoOXJhOWVDNzlBZG9CRHBsZUVXeXQza0NnZGd4Yk9aWHJZMjVpa2Y1aGVYX1B3eWgzbWpZYWQydENXYWRtVUl2T3FXNm5YbTdvQzJsSVlCMjBKRV9hUnZTMjZaQVR1TFFoSjY2NA=="
+      token: "fImYv87jSTW4uKzZRTOWbL:APA91bH1XCRRSvrXbe8W9DHQrXLXveHoYP1XT9v02o4WiEOylrh7fNpS11LcwpS68pas0NhpQY9RyA24BDbRbf0aOwP9oXEnz07eAbZ_yHwOnSIQpBd-JQ0"
   );
 }

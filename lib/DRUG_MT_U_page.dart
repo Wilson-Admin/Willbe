@@ -2290,6 +2290,7 @@ COMMIT;
                                             }
                                           }
                                           catch(e){
+                                            dev.log('err:${e}');
                                             SmartDialog.dismiss();
                                             SmartDialog.showToast("執行失敗,請重新嘗試");
                                           }
