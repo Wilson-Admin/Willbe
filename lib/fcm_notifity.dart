@@ -109,7 +109,7 @@ Future<void> sendPushNotification(
 Future<String?> getOAuthToken() async {
   try {
     final jsonStr = await rootBundle.loadString(
-      'assets/file/huaweidigi2-firebase-adminsdk-g8i8z-cb0db58236.json',
+      'assets/file/serviceAccountKey.json',
     );
     final accountCredentials = ServiceAccountCredentials.fromJson(
       json.decode(jsonStr),

@@ -78,8 +78,8 @@ double screen_height = 852;
 bool DEBUG_MODE = false;//true:debug模式 , false:正常模式
 
 //app store版本
-int android_version = 246;
-int ios_version = 246;
+int android_version = 247;
+int ios_version = 247;
 
 
 bool is_finish_load = false;
