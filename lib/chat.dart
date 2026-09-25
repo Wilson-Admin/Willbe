@@ -2110,140 +2110,130 @@ ORDER BY MessageID DESC;''';
                   user: _user,
                   dateIsUtc: false,
                   customStatusBuilder:customStatusBuilder,
-                  customBottomWidget:Container(width: ScreenUtil().screenWidth,child:
-                  Row(children: [
-
-
-                    Container(width: 10.w,),
-                    Expanded(child: GestureDetector(
-                        onTap: ()async{
-                          if(ChatID.isEmpty){
-                            Fluttertoast.showToast(
+                  customBottomWidget: Container(
+                    width: ScreenUtil().screenWidth,
+                    padding: EdgeInsets.symmetric(vertical: 8.h),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end, // 多行時按鈕貼齊底部
+                      children: [
+                        Container(width: 10.w),
+                        GestureDetector(
+                          onTap: () async {
+                            if (ChatID.isEmpty) {
+                              Fluttertoast.showToast(
                                 msg: "聊天室id為空,可嘗試回上一頁重新進入",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
-                                fontSize: 16.0
-                            );
-                            return;
-                          }
-
-
-                          _handleAttachmentPressed();
-                        },
-                        child: SvgPicture.asset("assets/images/组 1153.svg",width: (iPad)?28.w:45.w,))),
-                    Container(width: 5.w,),
-                    Expanded(flex:8,child: Container(
-                        padding: EdgeInsets.only( left:16.w,right: 16.w),
-                        width: ScreenUtil().screenWidth,
-                        height: 62.h,
-                        decoration: BoxDecoration(
-                          color: Color(0xffF2F2F2),
-                          borderRadius: BorderRadius.circular(30.w),
-                          border: Border.all(
-                            color: Color(0xffA7A7A7),
+                                fontSize: 16.0,
+                              );
+                              return;
+                            }
+                            _handleAttachmentPressed();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 6.h),
+                            child: SvgPicture.asset(
+                              "assets/images/组 1153.svg",
+                              width: (iPad) ? 28.w : 45.w,
+                            ),
                           ),
                         ),
-                        child: Column(children: [
-
-                          Expanded(child: Container()),
-                          Container(width: ScreenUtil().screenWidth,child:
-                          Row(children: [
-                            Expanded(child: Form(
-                                child: TextFormField(
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: Color(0xff555555),
-                                  ),
-                                  controller: message_TextEditingController,
-                                  keyboardType: TextInputType.text,
-                                  //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                  inputFormatters: [
-                                    SingleQuoteToFullQuoteFormatter(),
-                                    //RemoveEmojiInputFormatter()
-                                    /*
-                                    FilteringTextInputFormatter.deny(
-                                      RegExp(
-                                        r'[\u{1F600}-\u{1F64F}]|' // 表情符號
-                                        r'[\u{1F300}-\u{1F5FF}]|' // 符號和圖示
-                                        r'[\u{1F680}-\u{1F6FF}]|' // 交通工具
-                                        r'[\u{1F700}-\u{1F77F}]|' // 其他符號
-                                        r'[\u{1F780}-\u{1F7FF}]|' // 其他符號
-                                        r'[\u{1F800}-\u{1F8FF}]|' // 其他符號
-                                        r'[\u{1F900}-\u{1F9FF}]|' // 其他符號
-                                        r'[\u{1FA00}-\u{1FAFF}]|' // 其他符號
-                                        r'[\u{2600}-\u{26FF}]|' // 雜項符號（例如 ☀、☂）
-                                        r'[\u{2700}-\u{27BF}]|' // Dingbats（例如 ✂、✉）
-                                        r'[\u{FE00}-\u{FE0F}]|' // 變體選擇符（VS-16 可能影響 Emoji 輸入）
-                                        r'[\u{1F1E6}-\u{1F1FF}]' // 國旗 Emoji
-                                        r'|[\u{200D}]', // Zero Width Joiner（ZWJ），組合多個字符成 Emoji
-                                        unicode: true,
+                        Container(width: 5.w),
+                        Expanded(
+                          flex: 8,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
+                            // 設定最小初始高度與最大自適應延展高度
+                            constraints: BoxConstraints(
+                              minHeight: 46.h,
+                              maxHeight: 130.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xffF2F2F2),
+                              borderRadius: BorderRadius.circular(18.w),
+                              border: Border.all(
+                                color: const Color(0xffA7A7A7),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Form(
+                                    child: TextFormField(
+                                      controller: message_TextEditingController,
+                                      // 啟用多行並支援 iOS 與 Android 軟體鍵盤換行
+                                      keyboardType: TextInputType.multiline,
+                                      textInputAction: TextInputAction.newline,
+                                      minLines: 1,
+                                      maxLines: 5, // 1~5 行內依文字內容自動長高，超過則內部滾動
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        color: const Color(0xff555555),
+                                      ),
+                                      inputFormatters: [
+                                        SingleQuoteToFullQuoteFormatter(),
+                                      ],
+                                      autofocus: false,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        filled: true,
+                                        fillColor: Colors.transparent,
+                                        hintText: '請輸入',
+                                        hintStyle: TextStyle(
+                                          color: const Color(0xff9E9E9E),
+                                          fontSize: 16.sp,
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(vertical: 8.h),
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
                                       ),
                                     ),
-
-                                     */
-                                  ],
-                                  autofocus: false,
-                                  //obscureText: !_adminVisible,
-                                  //obscureText: !_accountVisible,//This will obscure text dynamically
-                                  //maxLength: 50,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  //initialValue: 'edu_test010@ncku.com',
-                                  //inputFormatters: [EmailLimitFormatter()],
-                                  //validator: (value) => validateEmail(value!),
-                                  decoration: InputDecoration(
-                                    filled: true, //<-- SEE HERE
-                                    fillColor: Colors.transparent, //<-- SEE HERE
-                                    hintText: '請輸入',
-                                    hintStyle: TextStyle(color:  Color(0xff9E9E9E),fontSize: 16.sp),
-                                    contentPadding:  EdgeInsets.only(left: 0,right: 0),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
-                                        borderRadius: BorderRadius.circular(0.0)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
-                                        borderRadius: BorderRadius.circular(0.0)),
-                                    focusedBorder:OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
-                                        borderRadius: BorderRadius.circular(0.0)),
-                                    disabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
-                                        borderRadius: BorderRadius.circular(0.0)),
                                   ),
-                                ))),
-                            GestureDetector(
-                                onTap: ()async{
-                                  if(ChatID.isEmpty){
-                                    Fluttertoast.showToast(
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (ChatID.isEmpty) {
+                                      Fluttertoast.showToast(
                                         msg: "聊天室id為空,可嘗試回上一頁重新進入",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
                                         backgroundColor: Colors.red,
                                         textColor: Colors.white,
-                                        fontSize: 16.0
-                                    );
-                                    return;
-                                  }
+                                        fontSize: 16.0,
+                                      );
+                                      return;
+                                    }
 
-
-                                  String message = message_TextEditingController.text;
-                                  message_TextEditingController.text="";
-                                  if(message.isNotEmpty){
-                                    insert_MSDL2_db_sub(message:message);
-                                  }
-                                },
-                                child: SvgPicture.asset("assets/images/Icon ionic-ios-send.svg",width:(iPad)?20.w:28.w,)),
-                          ],)),
-                          Expanded(child: Container()),
-
-                        ],)
-                    )),
-                    Container(width: 10.w,),
-
-                  ],)),
+                                    String message = message_TextEditingController.text.trim();
+                                    message_TextEditingController.clear();
+                                    if (message.isNotEmpty) {
+                                      insert_MSDL2_db_sub(message: message);
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(bottom: 6.h, left: 6.w),
+                                    child: SvgPicture.asset(
+                                      "assets/images/Icon ionic-ios-send.svg",
+                                      width: (iPad) ? 20.w : 28.w,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(width: 10.w),
+                      ],
+                    ),
+                  ),
                   theme: const chat_ui.DefaultChatTheme(
                     backgroundColor: Color(0xffFAF7F2),
                     secondaryColor: Color(0xffffffff),
