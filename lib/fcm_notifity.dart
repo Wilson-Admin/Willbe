@@ -24,6 +24,84 @@ String normalizeToken(String token) {
 }
 
 
+Future<void> sendPushNotification(
+    {
+      String token="",
+      String title="",
+      String message="",
+      String ChatID="",
+      String TeacherAccount="",
+      String UserAccount="",
+      String CS_NO="",
+      String DATE="",
+      String EXCUSED_NO="",
+      String CFM_NO="",
+      String DRUG_NO="",
+      String ENTRUSTED_NO="",
+      String DAILY_NOT_NO="",
+      String DAILY_PRS_NO=""
+
+    }) async {
+  final url = Uri.parse('https://tw-wilson.com/api/Firebase/Send');
+  Map<String,String> headers = {
+    'Content-Type': 'application/json; charset=utf-8',
+    //'Authorization': 'Bearer ${user.ACCOUNT}'
+    'Authorization': 'Bearer WILSONq7tXJpA4Mvksf2y1bZ9hQnE6R3oFLUu8mCgxYr0VdzKNTijw5aOBGPHclSDe'
+  };
+  final body = jsonEncode({
+    'message': {
+      'token': '${normalizeToken("${token}")}',
+      'data': {
+        'ChatID': '${ChatID}',
+        'TeacherAccount': "${TeacherAccount}",
+        'UserAccount': "${UserAccount}",
+        'CS_NO': "${CS_NO}",
+        'DATE': "${DATE}",
+        'EXCUSED_NO':"${EXCUSED_NO}",
+        'CFM_NO':"${CFM_NO}",
+        'DRUG_NO':"${DRUG_NO}",
+        'ENTRUSTED_NO':"${ENTRUSTED_NO}",
+        'DAILY_NOT_NO':"${DAILY_NOT_NO}",
+        'DAILY_PRS_NO':"${DAILY_PRS_NO}",
+        'title':"${title}"
+      },
+      'notification': {
+        'title': '${title}',
+        'body': '${message}',
+      },
+      'android': {
+        'priority': 'high',  // ✅ 注意是小寫
+      },
+      "apns": {
+        "headers": {
+          "apns-priority": "10",//10：即時送達，會喚醒裝置。
+        },
+        "payload": {
+          "aps": {
+            "alert": {
+              "title": '${title}',
+              "body": '${message}',
+            },
+            "badge": 1,
+            "sound": "default",
+            "content-available": 1 //背景也能收到並處理 data 部分的資料，請在 apns.payload.aps 裡加上
+          }
+        }
+      }
+    },
+  });
+  log("推播headers:${headers}");
+  log("推播body:${body}");
+  final response = await http.post(url, headers: headers, body: body);
+  if (response.statusCode == 200) {
+    log('Push notification sent successfully');
+  } else {
+    log('Failed to send push notification: ${response.statusCode} - ${response.body}');
+  }
+}
+
+
+/*
 int _messageCount = 0;
 Future<void> sendPushNotification(
     {
@@ -133,6 +211,8 @@ Future<String?> getOAuthToken() async {
     return null;
   }
 }
+
+ */
 /*
 Future<String?> getOAuthToken() async {
   try {
