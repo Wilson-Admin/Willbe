@@ -133,8 +133,7 @@ SET @Prefix = CONVERT(CHAR(8), @Date, 112);
 
 SELECT @StartNo = ISNULL(MAX(CAST(RIGHT(BLOG_NO, 4) AS INT)), 0)
 FROM BLOG WITH (UPDLOCK, HOLDLOCK)
-WHERE BLTN_DT = @Date 
-  AND LEFT(BLOG_NO, 8) = @Prefix;
+WHERE LEFT(BLOG_NO, 8) = @Prefix;
 
 -- 3. 建立 #NewNOs 暫存表
 IF OBJECT_ID('tempdb..#NewNOs') IS NOT NULL 
@@ -218,6 +217,7 @@ FROM @Result
 FOR JSON PATH, WITHOUT_ARRAY_WRAPPER;
 ''';
 
+    dev.log("comm:${comm}");
     String result = await sql_command2("${comm}");
     dev.log("寫入花絮(回應):${result}");
 
