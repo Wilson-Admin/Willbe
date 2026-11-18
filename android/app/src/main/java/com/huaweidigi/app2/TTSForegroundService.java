@@ -551,7 +551,7 @@ public class TTSForegroundService extends Service {
         // 1. 執行真正的語音播報指令
         // QUEUE_FLUSH 代表中斷目前的播報，立刻改播這則最新的（適合叫號系統）
         //int result = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-        int result = tts.speak(text.replace("栢", "脖").replaceAll("柏", "脖").replaceAll("璿", "旋").replaceAll("頡", "傑").replaceAll("子", "紫").replaceAll("纕", "香").replaceAll("酪", "落").replaceAll("周", "舟").replaceAll("汩", "遇").replaceAll("德", "鍀").replaceAll("筠", "芸").replaceAll("靚", "靜").replaceAll("亘", "軒").replaceAll("少", "邵").replaceAll("曾", "增").replaceAll("晟", "成").replaceAll("鎬", "浩").replaceAll("婕", "節").replaceAll("偲", "思"), TextToSpeech.QUEUE_FLUSH, null, ""+utteranceId);
+        int result = tts.speak(text.replaceAll("緁", "結").replaceAll("栢", "脖").replaceAll("柏", "脖").replaceAll("璿", "旋").replaceAll("頡", "傑").replaceAll("子", "紫").replaceAll("纕", "香").replaceAll("酪", "落").replaceAll("周", "舟").replaceAll("汩", "遇").replaceAll("德", "鍀").replaceAll("筠", "芸").replaceAll("靚", "靜").replaceAll("亘", "軒").replaceAll("少", "邵").replaceAll("曾", "增").replaceAll("晟", "成").replaceAll("鎬", "浩").replaceAll("婕", "節").replaceAll("偲", "思"), TextToSpeech.QUEUE_FLUSH, null, ""+utteranceId);
 
         // 2. 檢查 API 是否成功執行
         if (result == TextToSpeech.ERROR) {
